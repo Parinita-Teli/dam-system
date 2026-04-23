@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DAM Advanced Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #38bdf8;
+    }
+
+    #status {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    input {
+      padding: 8px;
+      margin: 10px 0;
+      width: 250px;
+    }
+
+    .btn-group {
+      margin-bottom: 10px;
+    }
+
+    #stats {
+      margin: 15px 0;
+      padding: 10px;
+      background: #1e293b;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #334155;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #1e293b;
+    }
+
+    .success {
+      background: #14532d;
+    }
+
+    .failed {
+      background: #7f1d1d;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>🔐 DAM Security Dashboard</h2>
+
+<p id="status">🟡 Live Monitoring Active...</p>
+
+<div class="btn-group">
+  <button onclick="loadLogs()">🔄 Refresh</button>
+  <button onclick="filterLogs('ALL')">All</button>
+  <button onclick="filterLogs('SUCCESS')">Success</button>
+  <button onclick="filterLogs('FAILED')">Failed</button>
+  <button onclick="exportCSV()">⬇ Export CSV</button>
+</div>
+
+<input type="text" placeholder="Search username..." onkeyup="searchUser(this.value)">
+
+<!-- STATS -->
+<div id="stats">
+  <h3>📊 Live Security Stats</h3>
+  <p>Total Logs: <span id="total">0</span></p>
+  <p>Success: <span id="success">0</span></p>
+  <p>Failed: <span id="failed">0</span></p>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Action</th>
+      <th>Status</th>
+      <th>IP</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+
+  <tbody id="logTable"></tbody>
+</table>
+
+<script>
+
+let allLogs = [];
+
+// LOAD LOGS
+function loadLogs() {
+  fetch("http://localhost:5000/logs")
+    .then(res => res.json())
+    .then(data => {
+      allLogs = data;
+      renderTable(allLogs);
+
+      document.getElementById("status").innerText =
+        "🟢 Last updated: " + new Date().toLocaleTimeString();
+    });
+}
+
+// RENDER TABLE + STATS
+function renderTable(data) {
+  let table = document.getElementById("logTable");
+  table.innerHTML = "";
+
+  let success = 0;
+  let failed = 0;
+
+  data.forEach(log => {
+
+    let isSuccess = log.status.includes("SUCCESS");
+
+    if (isSuccess) success++;
+    else failed++;
+
+    table.innerHTML += `
+      <tr class="${isSuccess ? 'success' : 'failed'}">
+        <td>${log.id}</td>
+        <td>${log.username}</td>
+        <td>${log.action}</td>
+        <td>${log.status}</td>
+        <td>${log.ip_address}</td>
+        <td>${log.created_at}</td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("total").innerText = data.length;
+  document.getElementById("success").innerText = success;
+  document.getElementById("failed").innerText = failed;
+}
+
+// FILTER LOGS
+function filterLogs(type) {
+  if (type === "ALL") {
+    renderTable(allLogs);
+  } else {
+    let filtered = allLogs.filter(log =>
+      log.status.includes(type)
+    );
+    renderTable(filtered);
+  }
+}
+
+// SEARCH USER
+function searchUser(value) {
+  let filtered = allLogs.filter(log =>
+    log.username.toLowerCase().includes(value.toLowerCase())
+  );
+  renderTable(filtered);
+}
+
+// EXPORT CSV
+function exportCSV() {
+  let csv = "ID,Username,Action,Status,IP,Time\n";
+
+  allLogs.forEach(log => {
+    csv += `${log.id},${log.username},${log.action},${log.status},${log.ip_address},${log.created_at}\n`;
+  });
+
+  let blob = new Blob([csv], { type: "text/csv" });
+  let link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "dam_logs.csv";
+  link.click();
+}
+
+// AUTO REFRESH
+setInterval(loadLogs, 5000);
+
+// INITIAL LOAD
+loadLogs();
+
+</script>
+
+</body>
+</html>

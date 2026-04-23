@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Test</title>
+</head>
+
+<body>
+
+  <h2>DAM Login Test</h2>
+
+  <button onclick="login()">Login</button>
+
+  <p id="result"></p>
+
+  <script>
+    function login() {
+      fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: "janedoe",
+          password: "@pass123"
+        })
+      })
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("result").innerText = data;
+      })
+      .catch(err => {
+        document.getElementById("result").innerText = "Error ❌";
+      });
+    }
+  </script>
+
+</body>
+</html>
