@@ -33,21 +33,6 @@ It logs:
 - Chart.js
 - bcryptjs
 
----
-
-dam-system/
-│
-├── backend/
-│ ├── server.js
-│ ├── routes/
-│ │ └── auth.js
-│
-├── frontend/
-│ └── dashboard.html
-│
-├── database/
-│ └── MySQL tables
-│
-└── README.md
+-----
 
 ## 📂 Project Structure
