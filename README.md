@@ -18,7 +18,6 @@ It logs:
 - 📊 Real-time Audit Logs
 - 🚨 Suspicious Login Detection (Brute-force alerts)
 - 📈 SOC-style Dashboard
-- 📉 Pie Chart (Success vs Failed logins)
 - 🔎 Search & Filter Logs
 - ⬇ Export Logs to CSV
 - 🔄 Auto-refresh monitoring system
