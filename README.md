@@ -35,4 +35,19 @@ It logs:
 
 ---
 
+dam-system/
+│
+├── backend/
+│ ├── server.js
+│ ├── routes/
+│ │ └── auth.js
+│
+├── frontend/
+│ └── dashboard.html
+│
+├── database/
+│ └── MySQL tables
+│
+└── README.md
+
 ## 📂 Project Structure
