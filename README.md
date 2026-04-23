@@ -1,1 +1,39 @@
-# dam-system
+# 🔐 DAM (Database Activity Monitoring) System
+
+## 📌 Overview
+This project is a **Database Activity Monitoring (DAM) system** with a SOC-style dashboard that tracks user authentication activities in real time.
+
+It logs:
+- Login attempts
+- Successful logins
+- Failed login attempts
+- IP address tracking
+- Timestamp logging
+
+---
+
+## 🚀 Features
+
+- 🔐 User Authentication System
+- 📊 Real-time Audit Logs
+- 🚨 Suspicious Login Detection (Brute-force alerts)
+- 📈 SOC-style Dashboard
+- 📉 Pie Chart (Success vs Failed logins)
+- 🔎 Search & Filter Logs
+- ⬇ Export Logs to CSV
+- 🔄 Auto-refresh monitoring system
+
+---
+
+## 🛠 Tech Stack
+
+- Node.js
+- Express.js
+- MySQL
+- HTML/CSS/JavaScript
+- Chart.js
+- bcryptjs
+
+---
+
+## 📂 Project Structure
